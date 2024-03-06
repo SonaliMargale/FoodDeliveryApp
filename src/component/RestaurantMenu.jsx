@@ -31,6 +31,7 @@ const RestaurantMenu = () => {
         //console.log("menu",resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card?.itemCards[2]?.card?.info)
           
         const  {itemCards}  = resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card?.itemCards[2]?.card?.info
+        //if we put constant then api is coming in console.
 
        console.log("menuu",itemCards)
 
