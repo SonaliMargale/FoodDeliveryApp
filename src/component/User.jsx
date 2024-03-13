@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useActionData } from "react-router-dom";
 
 const User = ({name}) => {
     const[count] = useState(0);

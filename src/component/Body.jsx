@@ -4,6 +4,7 @@ import './Body.css';
  import resobj from "../utils/mockData.js";
 import Shimmer from "./Shimmer.jsx";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus.jsx";
 
 const Body = () => {
    const [listofRestaurant, setlistofRestaurant] = useState([]);
@@ -18,29 +19,33 @@ const Body = () => {
       const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.96340&lng=77.58550&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING")
       const json = await data.json()
        console.log(json)
-    //  console.log(json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants)
       const restaurants = json.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
       // console.log(restaurants) 
       setlistofRestaurant(restaurants)
       setfilterRestaurant(restaurants)
-      //  console.log("jsonnn",restaurants)
-      //  console.log("resobjjj",resList)
+      
+
+      const onlineStatus = useOnlineStatus()
+      if(onlineStatus === false) return (
+      <h1>please check your internet connection once</h1>
+      )
+
 
     }
     
     return listofRestaurant.length === 0 ? <Shimmer /> : (
        <div className="body">
         <div className="filter">
-          <div className="search">
+          <div className="search m-2 p-2">
             <input type="text" 
-             className="search-box"
+             className="search-box border border-solid border-black"
              value = {searchText}
              onChange = {(e) => {
               setsearchText(e.target.value)
              }}>
             </input>
              
-             <button 
+             <button className="px-2 py-2 bg-green-100 m-2 rounded-lg"
               onClick={() => {
               const filterrestaurant = listofRestaurant.filter((res) => 
               res.info.name.toLowerCase().includes(searchText.toLowerCase())
@@ -50,8 +55,8 @@ const Body = () => {
               search
              </button>
           </div>
-          
-          <button className="filter-btn"
+          <div className="m-2 p-2 ">
+          <button className="bg-gray-100 py-2 px-2 rounded-lg"
             onClick = {() => {
               //filter logic here
               let filterList = listofRestaurant.filter(
@@ -61,11 +66,11 @@ const Body = () => {
               setlistofRestaurant(filterList)
             }}>
             top rated Restaurant 
-          </button>
-          {/* key={Restaurant?.data.id} */}
+           </button>
+         </div>
         </div>
-        <div className="res-container">
-         {listofRestaurant?.map((Restaurant) =>
+        <div className="flex flex-wrap">
+         {filterRestaurant?.map((Restaurant) =>
          <Link to={"/restaurants/" + Restaurant.info.id}>
           <RestaurantCard  key={Restaurant?.info.id}  resList={Restaurant}  /> 
           </Link>

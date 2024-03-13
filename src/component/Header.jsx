@@ -3,6 +3,7 @@ import './Header.css';
 import {LOGO_URL} from "../utils/constant";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import useOnlineStatus from "../utils/useOnlineStatus";
 
 
 const Header = () => {
@@ -13,17 +14,21 @@ const Header = () => {
    useEffect(() => {
      console.log("useEffect")
    }, [btnNameReact])
+
+   const onlineStatus = useOnlineStatus()
     return (
-        <div className="header">
+        <div className="flex justify-between border">
         <div className="logo-container">
-        <img className="logo" src={LOGO_URL}></img>
+        <img className="w-24" src={LOGO_URL}></img>
       </div>
-      <div className="nav-items">
-       <ul>
+      <div className="flex items-center">
+       <ul className="flex gap-4">
+        <li>online status : {onlineStatus ? "⬆️" :"🔴"}</li>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/about">About</Link></li>
         <li><Link to="/contact">Contact Us</Link></li>
         <li><Link to="/card">card</Link></li>
+        <li><Link to="/grocery">Grocery</Link></li>
         <button className="login"
         onClick = {() => {
           btnNameReact === "Login" ? SetbtnNameReact("Logout") : SetbtnNameReact("Login")
