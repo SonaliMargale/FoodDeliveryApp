@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer.jsx";
 import {useParams} from 'react-router-dom'
 import useRestaurantMenu from "../utils/useRestaurantMenu.jsx";
+import RestaurantCategory from "./RestaurantCategory.jsx";
 // import { MENU_API } from "../utils/constant.js";
 
 const RestaurantMenu = () => {
-  
-
   const {resId} = useParams();
-  const resInfo = useRestaurantMenu(resId)
+  const resInfo = useRestaurantMenu(resId);
+  const[showIndex, setShowIndex] = useState(null)
 
     // useEffect(() => {
     //         fetchmenu();
@@ -23,25 +23,27 @@ const RestaurantMenu = () => {
            
         if ( resInfo === null) return <Shimmer /> 
         
-        const {name,cuisines,costForTwo} = resInfo?.cards[0]?.card?.card?.info;
+         const {name,cuisines,costForTwo} = resInfo?.cards[2]?.card?.card?.info 
+         console.log("heyyy",resInfo?.cards[2]?.card?.card?.info)
        
-        const  {itemCards}  = resInfo?.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card
-       //console.log("menuu",itemCards)
+        const  {itemCards}  = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[0]?.card?.card
+        console.log("menuu",resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[0]?.card?.card)
+
+        const categories = resInfo?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards.filter((c) =>   // to filter itemcategory
+        c.card?.["card"]?.["@type"] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory")
 
          return  (
-        <div className="menu">
+        <div className="menu text-center">
+            <h1 className="font-bold my-6 Text-2xl">{name}</h1>
+            <p className="font-bold Text-lg">{cuisines?.join(",")} - {costForTwo} </p>
 
-            <h1>{name}</h1>
-            <h1>{cuisines.join(",")}</h1>
-            <h1>{costForTwo}</h1>
-            <h2>Menu</h2>
-                <ul>
-                  {itemCards?.map((item) => (
-                    <li key={item.card.info.id} >{item.card.info.name}-{" "}
-                    {item.card.info.price/100 || item.card.info.defaultPrice/100}
-                    </li>
-                  ))}    
-             </ul>
+            {/* {categories accordian} */}
+            {categories?.map((category, index) =>
+            <RestaurantCategory key={category?.card?.card.title} 
+              data={category?.card?.card} 
+              showItems = {index === showIndex ? true : false}
+              setShowIndex = {() => setShowIndex(index)}
+              />)}
                </div>
     )
 }

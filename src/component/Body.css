@@ -1,8 +1,8 @@
- /* .res-container {
+ .res-container {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 .filter-btn {
    margin: 5px;
-}  */
+} 

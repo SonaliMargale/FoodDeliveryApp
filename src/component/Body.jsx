@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from "react";
-import RestaurantCard from "./RestaurantCard.jsx";
+import React, { useContext, useEffect, useState } from "react";
+import RestaurantCard, {withPromotedLabel} from "./RestaurantCard.jsx";
 import './Body.css';
- import resobj from "../utils/mockData.js";
 import Shimmer from "./Shimmer.jsx";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus.jsx";
+import UserContext from "../utils/userContext.js";
+
 
 const Body = () => {
    const [listofRestaurant, setlistofRestaurant] = useState([]);
    const[filterRestaurant, setfilterRestaurant] = useState([]);
    const [searchText, setsearchText] = useState("")
-  
+
+   const RestaurantCardPromoted = withPromotedLabel(RestaurantCard)
+
+   const {loggedInUser, setUserName} = useContext(UserContext)
+
     useEffect(() => {
       fetchdata();
      },[])
@@ -20,7 +25,6 @@ const Body = () => {
       const json = await data.json()
        console.log(json)
       const restaurants = json.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-      // console.log(restaurants) 
       setlistofRestaurant(restaurants)
       setfilterRestaurant(restaurants)
       
@@ -54,9 +58,7 @@ const Body = () => {
               }}>
               search
              </button>
-          </div>
-          <div className="m-2 p-2 ">
-          <button className="bg-gray-100 py-2 px-2 rounded-lg"
+             <button className="bg-gray-100 py-2 px-2 rounded-lg"
             onClick = {() => {
               //filter logic here
               let filterList = listofRestaurant.filter(
@@ -67,7 +69,12 @@ const Body = () => {
             }}>
             top rated Restaurant 
            </button>
-         </div>
+            <label className="m-2">UserName:</label> 
+            <input className="border border-black" 
+            value={loggedInUser}
+            onChange={(e) => setUserName(e.target.value)}
+            />
+          </div>
         </div>
         <div className="flex flex-wrap">
          {filterRestaurant?.map((Restaurant) =>
