@@ -9,6 +9,7 @@ import Error from './component/Error.jsx';
 import Body from './component/Body.jsx';
 import RestaurantMenu from './component/RestaurantMenu.jsx';
 import { lazy, Suspense } from 'react';
+import Cart from './component/Cart.jsx';
 //import Grocery from './component/Grocery.jsx';
 
 
@@ -40,6 +41,10 @@ const AppRouter = createBrowserRouter([
       path: "/restaurants/:resId",
       element: <RestaurantMenu />,
     },
+    {
+      path:"/cart",
+      element:<Cart />
+    }
     // {
     //   path: "/restaurants",
     //   element: <RestaurantMenu />, 
